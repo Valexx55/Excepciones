@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MIAPP", "FALLO Throwable", fallo);
         }
 
-
+        BufferedReader bufferedReader = null;
         try {
             //en qué espacios puedo crear un fichero ?
             String ruta_privada = getFilesDir().getPath()+"/basedatos.txt";
@@ -57,17 +60,40 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Log.d("MIAPP", "EL FICHERO " + ruta_privada+" es un ARCHIVO ");
                 }
-                fichero.delete();
-                Log.d("MIAPP", "FICHERO " + ruta_privada+" ELIMINADO ");
+                //fichero.delete();
+                FileReader fileReader = new FileReader(fichero);
+                bufferedReader = new BufferedReader(fileReader);
+                String linea = bufferedReader.readLine();
+
+                Log.d("MIAPP", "linea leida =  " + linea);
+                //bufferedReader.close();
+                /*int letra = fileReader.read();
+                char letra_caracter = (char)letra;
+                fileReader.close();
+                Log.d("MIAPP", "letra leida =  " + letra + " "+ letra_caracter);
+                */
+
+
             } else
             {
                 Log.d("MIAPP", "EL FICHERO " + ruta_privada+" NO EXISTE ");
                 fichero.createNewFile();
                 Log.d("MIAPP", "FICHERO " + ruta_privada+" CREADO ");
+                FileWriter fileWriter = new FileWriter(fichero);
+                fileWriter.write("HOLA\n A TODOS");//escapar! preceder del símoblo \ escape a una letra, para que tenga un significado especial
+                fileWriter.close();
             }
             //fichero.createNewFile();
         } catch (Exception e) {
             Log.e("MIAPP", "FALLO AL CREAR FICHERO", e);
+        }finally {
+            try {
+                if (bufferedReader!=null) {
+                  bufferedReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
