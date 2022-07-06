@@ -29,6 +29,21 @@ public class MainActivity extends AppCompatActivity {
         f.write(palabra + "\n");
     }
 
+    private FileWriter crearFicheroEnModoEscritura (String ruta) throws IOException {
+        FileWriter fileWriter = null;
+        File file = null;
+
+            //creo el fichero si no existe y lo abro en modo escritura con FileWriter
+            file = new File(ruta);
+            if (!file.exists())
+            {
+                file.createNewFile();
+            }
+            fileWriter = new FileWriter(file);
+
+        return fileWriter;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,19 +84,10 @@ public class MainActivity extends AppCompatActivity {
         String linea = null;
         int longitud_linea = 0;
         try {
-            //en qué espacios puedo crear un fichero ?
-            f0 = new File(getFilesDir().getPath() + "/"+nombre_fichero3);
-            f1 = new File(getFilesDir().getPath() + "/"+nombre_fichero4);
-            f2 = new File(getFilesDir().getPath() + "/"+nombre_fichero5);
-
-            f0.createNewFile();
-            f1.createNewFile();
-            f2.createNewFile();
-
-            f3 = new FileWriter(f0);
-            f4 = new FileWriter(f1);
-            f5 = new FileWriter(f2);
-
+            //preparo los ficheros para escribir en ellos
+            f3 = crearFicheroEnModoEscritura(getFilesDir().getPath() + "/"+nombre_fichero3);
+            f4 = crearFicheroEnModoEscritura(getFilesDir().getPath() + "/"+nombre_fichero4);
+            f5 = crearFicheroEnModoEscritura(getFilesDir().getPath() + "/"+nombre_fichero5);
 
             String ruta_fichero_diccionario = getFilesDir().getPath() + "/" + nombre_fichero_entrada;
             bufferedReader = new BufferedReader(new FileReader(ruta_fichero_diccionario));
@@ -102,30 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-            //fichero.delete();
-            /*    FileReader fileReader = new FileReader(fichero);
-                bufferedReader = new BufferedReader(fileReader);
-                String linea = bufferedReader.readLine();
 
-                Log.d("MIAPP", "linea leida =  " + linea);*/
-            //bufferedReader.close();
-                /*int letra = fileReader.read();
-                char letra_caracter = (char)letra;
-                fileReader.close();
-                Log.d("MIAPP", "letra leida =  " + letra + " "+ letra_caracter);
-                */
-
-
-            /*} else
-            {
-                Log.d("MIAPP", "EL FICHERO " + ruta_privada+" NO EXISTE ");
-                fichero.createNewFile();
-                Log.d("MIAPP", "FICHERO " + ruta_privada+" CREADO ");
-                FileWriter fileWriter = new FileWriter(fichero);
-                fileWriter.write("HOLA\n A TODOS");//escapar! preceder del símoblo \ escape a una letra, para que tenga un significado especial
-                fileWriter.close();
-            }*/
-            //fichero.createNewFile();
         } catch (Exception e) {
             Log.e("MIAPP", "FALLO AL CREAR FICHERO", e);
         } finally {
